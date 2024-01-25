@@ -39,12 +39,5 @@ package() {
   cd "${_name}-${pkgver}"
 
   python -m installer --destdir="$pkgdir" dist/*.whl
-
-  # https://wiki.archlinux.org/title/Python_package_guidelines#Using_site-packages
-  local _site_packages="$(python -c 'import site; print(site.getsitepackages()[0])')"
-
-  install -d "$pkgdir/usr/share/licenses/$pkgname"
-  local _license_path="$_site_packages/$_pyname-$pkgver.dist-info/LICENSE"
-  [ -f "$pkgdir/$_license_path" ] || { echo "License file not found"; exit 1; }
-  ln -s "$_license_path" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -m644 LICENSE "${pkgdir}/usr/share/licenses/$pkgname/LICENSE"
 }
